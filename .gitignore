@@ -1,0 +1,13 @@
+# Data
+data/
+*.zip
+
+# Models
+# *.h5
+# (Keep .tflite because it's small enough for the repo)
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+Pipfile.lock
