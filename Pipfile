@@ -12,6 +12,7 @@ scikit-learn = "*"
 streamlit = "*"
 pillow = "*"
 tensorflow-cpu = "*"
+flask = "*"
 
 [dev-packages]
 

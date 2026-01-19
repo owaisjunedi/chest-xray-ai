@@ -1,29 +1,32 @@
 import streamlit as st
 import tensorflow as tf
 from PIL import Image
-import numpy as np
+from predict import make_prediction
 
-st.title("Pneumonia Detection AI 🏥")
-st.write("Upload a Chest X-ray to get a diagnosis.")
+st.set_page_config(page_title="Pneumonia AI Detector", page_icon="🏥")
 
-# Load your trained model
-model = tf.keras.models.load_model('pneumonia_model.h5')
+st.title("Chest X-ray Pneumonia Detector 🏥")
+st.write("Upload a pediatric chest X-ray for an AI-powered diagnosis.")
 
-uploaded_file = st.file_uploader("Choose an image...", type="jpeg")
+# Load model once and cache it for speed
+@st.cache_resource
+def load_my_model():
+    return tf.keras.models.load_model('pneumonia_model.h5')
 
-if uploaded_file is not None:
-    image = Image.open(uploaded_file).convert('RGB')
-    st.image(image, caption='Uploaded X-ray', use_column_width=True)
+model = load_my_model()
 
-    # Preprocess
-    img = image.resize((224, 224))
-    x = np.array(img) / 255.0
-    x = np.expand_dims(x, axis=0)
+uploaded_file = st.file_uploader("Upload X-ray Image (JPEG/PNG)", type=["jpg", "jpeg", "png"])
 
-    # Predict
-    prediction = model.predict(x)[0][0]
-
-    if prediction > 0.5:
-        st.error(f"Result: PNEUMONIA DETECTED (Confidence: {prediction*100:.2f}%)")
+if uploaded_file:
+    image = Image.open(uploaded_file)
+    st.image(image, caption="Uploaded Scan", use_container_width=True)
+    
+    with st.spinner('Analyzing scan...'):
+        label, prob = make_prediction(model, image)
+        
+    if label == "PNEUMONIA":
+        st.error(f"Prediction: **{label}**")
+        st.write(f"Confidence: {prob*100:.2f}%")
     else:
-        st.success(f"Result: NORMAL LUNGS (Confidence: {(1-prediction)*100:.2f}%)")
+        st.success(f"Prediction: **{label}**")
+        st.write(f"Confidence: {(1-prob)*100:.2f}%")

@@ -1,17 +1,20 @@
+# 1. Use the stable Python 3.9 Lambda image
 FROM public.ecr.aws/lambda/python:3.9
 
-# 1. Install system dependencies
-RUN yum install -y mesa-libGL
+# 2. Update pip to the latest version
+RUN pip install --upgrade pip
 
-# 2. Install pillow and numpy
-RUN pip install numpy==1.23.5 pillow
+# 3. Install core dependencies
+# We lock these versions for maximum stability
+RUN pip install numpy==1.23.5 pillow==10.0.1
 
-# 3. Install the specific TFLite wheel compatible with this environment
-RUN pip install https://github.com/google-coral/py-repo/raw/master/tflite_runtime-2.5.0.post1-cp39-cp39-linux_x86_64.whl
+# 4. Install tflite-runtime from PyPI (no external URLs)
+RUN pip install tflite-runtime==2.11.0
 
-# 4. Copy files
+# 5. Copy the model and code
+# Ensure pneumonia_model.tflite is in your current folder
 COPY pneumonia_model.tflite ${LAMBDA_TASK_ROOT}
 COPY lambda_function.py ${LAMBDA_TASK_ROOT}
 
-# 5. Set the handler
+# 6. Set the handler
 CMD [ "lambda_function.lambda_handler" ]

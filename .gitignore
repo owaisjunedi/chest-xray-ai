@@ -6,8 +6,12 @@ data/
 # *.h5
 # (Keep .tflite because it's small enough for the repo)
 
-# Python
+# Environment & Dependencies
 __pycache__/
 *.pyc
 .venv/
+.ipynb_checkpoints/
 Pipfile.lock
+
+# OS files
+.DS_Store

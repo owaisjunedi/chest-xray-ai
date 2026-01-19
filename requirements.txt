@@ -1,0 +1,7 @@
+tensorflow-cpu
+streamlit
+pillow
+numpy
+scikit-learn
+jupyter
+Flask
