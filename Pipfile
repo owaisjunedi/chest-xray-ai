@@ -9,6 +9,9 @@ matplotlib = "*"
 numpy = "*"
 jupyter = "*"
 scikit-learn = "*"
+streamlit = "*"
+pillow = "*"
+tensorflow-cpu = "*"
 
 [dev-packages]
 

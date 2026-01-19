@@ -1,29 +1,73 @@
-# Pneumonia Detection AI: Serverless Deep Learning System
+# 🏥 Chest X-Ray Pneumonia Detection AI
 
-## 🏥 Project Overview
-This project is an end-to-end medical imaging system designed to detect Pneumonia from Chest X-ray images. It transitions from traditional machine learning to a modern, scalable **Deep Learning** stack.
+An end-to-end Deep Learning project designed to assist in the diagnosis of Pneumonia using pediatric chest X-rays. This system leverages **Transfer Learning** and a **Streamlit** web interface to provide rapid, high-recall predictions.
 
-## 🚀 Advanced Tech Stack
-* **Model:** Convolutional Neural Network (CNN) using **MobileNetV2** (Transfer Learning).
-* **Frameworks:** TensorFlow, Keras, Scikit-learn.
-* **Optimization:** Model converted to **TensorFlow Lite** for lightweight inference.
-* **Deployment:** Containerized with **Docker** and architected for **AWS Lambda (Serverless)**.
-* **Scale:** Designed to follow **Kubernetes** principles for high-availability serving.
+## 🎯 Project Impact
 
-## 📊 Performance Metrics
-The model achieved an overall accuracy of **86%** on the unseen test set, with a critical focus on Recall:
-* **Pneumonia Recall:** 0.99 (99% of positive cases detected).
-* **Overall Accuracy:** 86%.
+In medical imaging, missing a positive case (a False Negative) is a critical error. This model prioritizes **Recall**, achieving a **99% success rate** in identifying pneumonia cases in the test set, ensuring patient safety is the top priority.
 
-## 🏗️ Architecture (Serverless MLOps)
-1.  **Training:** Fine-tuned a pre-trained MobileNetV2 brain on 5,000+ medical images.
-2.  **Conversion:** Optimized the 25MB model into an 8MB `.tflite` file.
-3.  **Dockerization:** Used a specialized AWS Lambda base image to minimize cold-start latency.
-4.  **Inference:** Built a Python handler using `tflite-runtime` to process doctor uploads in < 1 second.
+---
+
+## 🚀 Technical Stack
+
+* **Deep Learning Framework:** TensorFlow / Keras
+* **Model Architecture:** MobileNetV2 (Transfer Learning)
+* **Web Interface:** Streamlit
+* **Data Processing:** NumPy, Pillow (PIL), Scikit-Learn
+* **Training Environment:** GitHub Codespaces (CPU-based)
+
+---
+
+## 📊 Performance Analysis (Module 4 & 8)
+
+The model was trained on over 5,000 images and evaluated against a 624-image test set.
+
+### **Metrics Summary**
+
+| Metric | Score | Why it matters? |
+| --- | --- | --- |
+| **Pneumonia Recall** | **0.99** | Only 5 out of 390 cases were missed. |
+| **Overall Accuracy** | **86%** | High reliability on unseen data. |
+| **Training Accuracy** | **97%** | Successful learning of medical textures. |
+
+---
+
+## 🛠️ Project Journey & Lessons Learned
+
+### **1. The Model (Transfer Learning)**
+
+Building a medical model from scratch requires millions of images. Instead, I used **MobileNetV2** (pre-trained on ImageNet) and "fine-tuned" it for X-ray textures. By freezing the early layers and training only the top medical-specific layers, I achieved high accuracy without needing a GPU.
+
+### **2. The Deployment Pivot (Infrastructure)**
+
+Initially, the project targeted a **Serverless (AWS Lambda)** deployment via **Docker**. However, due to low-level system library conflicts (`GLIBC` versioning) inherent in serverless environments for certain AI libraries, I strategically pivoted to a **Streamlit Web Application**. This ensured a robust, stable, and highly interactive deployment that is easier for medical staff to use.
+
+---
+
+## 💻 How to Run the App
+
+1. **Install dependencies:**
+```bash
+pip install streamlit tensorflow-cpu pillow numpy
+
+```
 
 
+2. **Launch the application:**
+```bash
+streamlit run app.py
 
-## 🛠️ How to Run
-1. Build the container: `docker build -t pneumonia-ai .`
-2. Run locally: `docker run -p 8080:8080 pneumonia-ai`
-3. Test: `python test_lambda.py`
+```
+
+
+3. **Upload an image:** Use any `.jpeg` X-ray image from the `data/test` folder to see the AI in action.
+
+---
+
+## 🧬 Future Improvements
+
+* **Multi-Class Classification:** Expand the model to distinguish between Bacterial and Viral pneumonia.
+* **Heatmap Visualization:** Implement Grad-CAM to show doctors exactly which part of the lung the AI is looking at.
+* **Cloud Hosting:** Deploy the Streamlit app to Streamlit Community Cloud or Heroku for public access.
+
+---
